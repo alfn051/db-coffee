@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="|내정보 : ${loginUser.name}|">My Page</title>
+</head>
+<body>
+<!--헤더 프레그먼트-->
+<div th:insert="~{fragments :: headerFragment}"></div>
+
+    <h2>기본정보</h2>
+    <form th:action="@{/user/update}" th:method="post">
+        <div class="form-group">
+            <ul>
+                <li>
+                    <p th:text="|아이디 : ${loginUser.username}|">id</p>
+                </li>
+                <li>
+                    <label for="password">비밀번호 : </label>
+                    <input type="password" id="password" name="password" placeholder="password" th:value="${loginUser.password}">
+                </li>
+                <li>
+                    <label for="name">이름 : </label>
+                    <input type="text" id="name" name="name" placeholder="홍길동" th:value="${loginUser.name}">
+                </li>
+                <li>
+                    <label for="phone">전화번호</label>
+                    <input type="tel" id="phone" name="phone" placeholder="01012345678" th:value="${loginUser.phone}">
+                </li>
+                <li>
+                    <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기">
+                </li>
+                <li>
+                    <label for="baseAddress">기본주소 : </label>
+                    <input type="text" id="baseAddress" name="baseAddress" placeholder="기본주소" th:value="${loginUser.baseAddress}">
+                </li>
+                <li>
+                    <label for="detailAddress">상세주소 : </label>
+                    <input type="text" id="detailAddress" name="detailAddress" placeholder="기본주소" th:value="${loginUser.detailAddress}">
+                </li>
+                <li>
+                    <label for="postalCode">우편번호 : </label>
+                    <input type="text" id="postalCode" name="postalCode" placeholder="기본주소" th:value="${loginUser.postalCode}">
+                </li>
+            </ul>
+        </div>
+        <button type="submit">수정</button>
+        <button type="button" onclick="window.history.back()">이전으로</button>
+    </form>
+
+
+<br><br><br>
+<a th:href="@{/user/withdrawal(userId = ${loginUser.id})}">탈퇴하기</a>
+
+
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    function execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                var addr = ''; // 주소 변수
+                var extraAddr = ''; // 참고항목 변수
+
+                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                    addr = data.roadAddress;
+                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                    addr = data.jibunAddress;
+                }
+
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                document.getElementById('postalCode').value = data.zonecode;
+                document.getElementById("baseAddress").value = addr;
+                // 커서를 상세주소 필드로 이동한다.
+                document.getElementById("detailAddress").focus();
+            }
+        }).open();
+    }
+</script>
+</body>
+</html>

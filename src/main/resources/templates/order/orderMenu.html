@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>장바구니</title>
+</head>
+<body>
+<!-- 헤더 프레그먼트 -->
+<div th:insert="~{fragments :: headerFragment}"></div>
+
+<!-- 장바구니 리스트 -->
+<div th:if="${!orderMenuList.isEmpty()}">
+    <table>
+        <thead>
+        <tr>
+            <th>상품명</th>
+            <th>가격</th>
+            <th>카테고리</th>
+            <th>금액</th>
+            <th>수량</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="orderMenu : ${orderMenuList}">
+            <td th:text="${orderMenu.menu.name}"></td>
+            <td th:text="${orderMenu.menu.price}"></td>
+            <td th:text="${orderMenu.menu.category.displayName}"></td>
+            <td>
+                <span th:text="| ${orderMenu.menu.price}원 x ${orderMenu.quantity} |"></span><br>
+                <span th:text="| = ${orderMenu.menu.price*orderMenu.quantity}원 |"></span>
+            </td>
+            <td>
+                <form th:action="@{/order/update}" method="post">
+                    <input type="hidden" th:value="${orderMenu.id}" name="orderMenuId">
+                    <input type="number" th:value="${orderMenu.quantity}" name="quantity" style="width: 40px">
+                    <button type="submit">수량 변경</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{/order/delete}" method="post">
+                    <input type="hidden" id="deleteOrdermenuId" name="orderMenuId" th:value="${orderMenu.id}">
+                    <button type="submit">삭제</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="4"></td>
+            <td>
+                <div>총 가격: <span th:text="|${totalAmount}원|"></span></div>
+            </td>
+            <td>
+                <form th:action="@{/order/confirm}" method="get">
+                    <select name="paymentMethod" required>
+                        <option th:each="paymentMethod : ${T(com.dnlab.coffee.order.common.PaymentMethod).values()}"
+                                th:value="${paymentMethod}"
+                                th:text="${paymentMethod.getDisplayName()}"></option>
+                    </select>
+                    <button type="submit">주문</button>
+                </form>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+<div th:unless="${!orderMenuList.isEmpty()}">
+    장바구니가 비어있습니다.
+</div>
+
+</body>
+</html>

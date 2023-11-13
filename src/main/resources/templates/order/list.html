@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MJ Book Store</title>
+</head>
+<body>
+<!--헤더 프레그먼트-->
+<div th:insert="~{fragments :: headerFragment}"></div>
+
+<ul>
+    <li th:each="order : ${orderList}">
+        <h4 th:text="|주문 날짜 및 시간 ${order.orderedTime}|"></h4>
+        <ul>
+            <li th:each="orderMenu : ${order.orderMenus}">
+                <span th:text="${orderMenu.menu.name}"></span>
+                <span th:text="|${orderMenu.menu.price}원|"></span>
+                <span th:text="|${orderMenu.quantity} 개|"></span>
+            </li>
+        </ul>
+        <span th:text="|총 ${order.totalAmount}원|"></span>
+        <span th:text="|결제수단 ${order.paymentMethod.getDisplayName()}|"></span>
+    </li>
+</ul>
+
+</body>
+</html>

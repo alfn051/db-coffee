@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>장바구니</title>
+</head>
+<body>
+<!-- 헤더 프레그먼트 -->
+<div th:insert="~{fragments :: headerFragment}"></div>
+
+<!-- 장바구니 리스트 -->
+<div>
+    <table>
+        <thead>
+        <tr>
+            <th>상품명</th>
+            <th>가격</th>
+            <th>카테고리</th>
+            <th>금액</th>
+            <th>수량</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${orderMenu.menu.name}"></td>
+            <td th:text="${orderMenu.menu.price}"></td>
+            <td th:text="${orderMenu.menu.category.displayName}"></td>
+            <td>
+                <span th:text="| ${orderMenu.menu.price}원 x ${orderMenu.quantity} |"></span><br>
+                <span th:text="| = ${orderMenu.menu.price*orderMenu.quantity}원 |"></span>
+            </td>
+            <td>
+                <span th:text="${orderMenu.quantity}"></span>
+            </td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="3"></td>
+            <td><a href="/">취소</a></td>
+            <td>
+                <div>총 가격: <span th:text="|${totalAmount}원|"></span></div>
+            </td>
+            <td>
+                <form th:action="@{/order/confirmQuick}" method="get">
+                    <select name="paymentMethod" required>
+                        <option th:each="paymentMethod : ${T(com.dnlab.coffee.order.common.PaymentMethod).values()}"
+                                th:value="${paymentMethod}"
+                                th:text="${paymentMethod.getDisplayName()}"></option>
+                    </select>
+                    <button type="submit">주문</button>
+                </form>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+
+</body>
+</html>

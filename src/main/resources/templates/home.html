@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MJ Book Store</title>
+</head>
+<body>
+<!--헤더 프레그먼트-->
+<div th:insert="~{fragments :: headerFragment}"></div>
+
+<h2 style="display: inline; margin: 30px; text-align: center">상품목록</h2>
+<form th:action="@{/}" method="get" style="display: inline">
+    <fieldset style="width: fit-content; display: inline">
+        <select name="category">
+            <option th:each="category : ${T(com.dnlab.coffee.menu.common.Category).values()}"
+                    th:value="${category}"
+                    th:text="${category.getDisplayName()}"></option>
+        </select>
+        <input type="text" name="search" th:value="${search}" placeholder="검색어 입력" style="width: 500px; height: 30px; border-style: none">
+        <input type="submit" value="검색">
+    </fieldset>
+</form>
+<div th:if="${!menuList.isEmpty()}">
+
+    <table>
+        <thead>
+        <tr>
+            <th></th>
+            <th>상품명</th>
+            <th>가격</th>
+            <th>카테고리</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="menu : ${menuList}">
+            <td><span th:if="${menu.isSpecial()}">[특별메뉴]</span></td>
+            <td><a th:text="${menu.name}" th:href="@{/menu(menuId=${menu.id})}"></a></td>
+            <td><span th:text="${menu.price}"></span></td>
+            <td><span th:text="${menu.category.displayName}"></span></td>
+            <td><form method="post">
+                <label for="menuId" hidden="hidden"></label>
+                <input type="hidden" th:value="${menu.id}" name="menuId" id="menuId">
+                <label for="quantity" hidden="hidden"></label>
+                <input th:if="${loginUser!=null}" type="number" name="quantity" id="quantity" value="1" style="width: 50px">
+                <button th:if="${loginUser!=null}" type="submit" formaction="/order/add">장바구니 담기</button>
+                <button th:if="${loginUser!=null}" type="submit" formaction="/order/quickOrder">바로 주문하기</button>
+            </form></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:unless="${!menuList.isEmpty()}">
+    <h4>상품이 존재하지 않습니다. </h4>
+</div>
+</body>
+</html>

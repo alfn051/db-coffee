@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MJ Book Store</title>
+</head>
+<body>
+<!--헤더 프레그먼트-->
+<div th:insert="~{fragments :: headerFragment}"></div>
+
+<h3>메뉴목록</h3>
+
+<ul>
+    <li>
+        <form method="post">
+            <table>
+                <tr>
+                    <td>이름: <input type="text" name="name"></td>
+                    <td>가격: <input type="number" name="price"></td>
+                    <td>카테고리:
+                        <select name="category">
+                            <option th:each="category : ${T(com.dnlab.coffee.menu.common.Category).values()}"
+                                    th:value="${category}"
+                                    th:if="${!category.equals(T(com.dnlab.coffee.menu.common.Category).ALL)}"
+                                    th:text="${category.getDisplayName()}"></option>
+                        </select>
+                    </td>
+                    <td>스페셜메뉴 여부: <input type="checkbox" name="special"></td>
+                    <td>
+                        <button type="submit" formaction="/menu/add">메뉴추가</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </li>
+    <li th:each="menu : ${menuList}">
+        <form method="post">
+            <table>
+                <tr>
+                    <td>이름: <input type="text" name="name" id="name" th:value="${menu.name}"></td>
+                    <td>가격: <input type="number" name="price" id="price" th:value="${menu.price}"></td>
+                    <td>카테고리:
+                        <select name="category">
+                        <option th:each="category : ${T(com.dnlab.coffee.menu.common.Category).values()}"
+                                th:value="${category}"
+                                th:if="${!category.equals(T(com.dnlab.coffee.menu.common.Category).ALL)}"
+                                th:text="${category.getDisplayName()}"
+                                th:selected="${category.equals(menu.category)}"></option>
+                        </select>
+                    </td>
+                    <td>
+                        스페셜메뉴 여부:
+                        <input th:if="${menu.special}" type="checkbox" name="special" checked>
+                        <input th:unless="${menu.special}" type="checkbox" name="special">
+                    </td>
+                    <td>
+                        <input type="text" name="menuId" th:value="${menu.id}" hidden="hidden">
+                        <button type="submit" formaction="/menu/update">수정</button>
+                        <button type="submit" formaction="/menu/remove">삭제</button>
+                        <a th:href="@{/menu/recipe(menuId = ${menu.id})}">레시피관리</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </li>
+</ul>
+
+<h3>재료목록</h3>
+
+<ul>
+    <li>
+        <form method="post">
+            <table>
+                <tr>
+                    <td>이름: <input type="text" name="name"></td>
+                    <td>재고: <input type="number" name="stock"></td>
+                    <td>단위:
+                        <select name="stockUnit">
+                            <option th:each="stockUnit : ${T(com.dnlab.coffee.menu.common.StockUnit).values()}"
+                                    th:value="${stockUnit}"
+                                    th:text="${stockUnit.getDisplayName()}"></option>
+                        </select>
+                    </td>
+                    <td>
+                        <button type="submit" formaction="/menu/ingredient/add">재료추가</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </li>
+    <li th:each="ingredient : ${ingredientList}">
+        <form method="post">
+            <table>
+                <tr>
+                    <td>이름: <input type="text" name="name" th:value="${ingredient.name}"></td>
+                    <td>재고: <input type="number" name="stock" th:value="${ingredient.stock}"></td>
+                    <td>단위:
+                        <select name="stockUnit">
+                            <option th:each="stockUnit : ${T(com.dnlab.coffee.menu.common.StockUnit).values()}"
+                                    th:value="${stockUnit}"
+                                    th:text="${stockUnit.getDisplayName()}"
+                                    th:selected="${stockUnit.equals(ingredient.stockUnit)}"></option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" name="ingredientId" th:value="${ingredient.id}" hidden="hidden">
+                        <button type="submit" formaction="/menu/ingredient/update">수정</button>
+                        <button type="submit" formaction="/menu/ingredient/remove">삭제</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </li>
+</ul>
+
+</body>
+</html>

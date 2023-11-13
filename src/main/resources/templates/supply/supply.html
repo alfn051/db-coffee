@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MJ Book Store</title>
+</head>
+<body>
+<!--헤더 프레그먼트-->
+<div th:insert="~{fragments :: headerFragment}"></div>
+
+<h3>공급재료</h3>
+
+<ul>
+    <li>
+        <form method="post">
+            <table>
+                <tr>
+                    <td>재료:
+                        <select name="ingredientId">
+                            <option th:each="ingredient : ${ingredientList}"
+                                    th:value="${ingredient.id}"
+                                    th:text="${ingredient.name}"></option>
+                        </select>
+                    </td>
+                    <td>공급량: <input type="number" name="amount">
+                        <input type="number" name="supplierId" th:value="${supplier.id}" hidden="hidden">
+                    </td>
+                    <td>단가: <input type="number" name="price"></td>
+                    <td>
+                        <button type="submit" formaction="/supply/addItem">공급재료추가</button>
+                    </td>
+                </tr>
+            </table>
+        </form>z
+    </li>
+    <li th:each="supplyItem : ${supply.getSupplyItemList()}">
+        <form method="post">
+            <table>
+                <tr>
+                    <td>재료:
+                        <span th:text="${supplyItem.ingredient.name}"></span>
+                    </td>
+                    <td>필요량: <span th:text="${supplyItem.amount}"></span>
+                        <span th:text="${supplyItem.ingredient.stockUnit.displayName}"></span>
+                    </td>
+                    <td>단가:
+                        <span th:text="${supplyItem.price}"></span>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </li>
+</ul>
+
+<form method="post">
+    <input type="number" name="supplierId" th:value="${supplier.id}" hidden="hidden">
+    납기일: <input type="datetime-local" name="suppliedDate" required>
+    <button type="submit" formaction="/supply/confirm">공급확인</button>
+</form>
+
+</body>
+</html>

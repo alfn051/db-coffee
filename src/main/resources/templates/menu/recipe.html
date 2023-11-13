@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MJ Book Store</title>
+</head>
+<body>
+<!--헤더 프레그먼트-->
+<div th:insert="~{fragments :: headerFragment}"></div>
+
+<h2 th:text="|${menu.name} 메뉴 레시피 관리|"></h2>
+
+<h3>레시피목록</h3>
+
+<ul>
+    <li>
+        <form method="post">
+            <table>
+                <tr>
+                    <td>재료:
+                        <select name="ingredientId">
+                            <option th:each="ingredient : ${ingredientList}"
+                                    th:value="${ingredient.id}"
+                                    th:text="${ingredient.name}"></option>
+                        </select>
+                    </td>
+                    <td>필요량: <input type="number" name="requiredAmount">
+                        <input type="number" name="menuId" th:value="${menu.id}" hidden="hidden">
+                    </td>
+                    <td>
+                        <button type="submit" formaction="/menu/recipe/add">레시피추가</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </li>
+    <li th:each="recipe : ${menu.getRecipes()}">
+        <form method="post">
+            <table>
+                <tr>
+                    <td>재료:
+                        <select name="ingredientId">
+                            <option th:each="ingredient : ${ingredientList}"
+                                    th:value="${ingredient.id}"
+                                    th:text="${ingredient.name}"
+                                    th:selected="${recipe.ingredient.equals(ingredient)}">
+                            </option>
+                        </select>
+                    </td>
+                    <td>필요량: <input type="number" name="requiredAmount" th:value="${recipe.requiredAmount}">
+                        <input type="number" name="recipeId" th:value="${recipe.id}" hidden="hidden">
+                        <span th:text="${recipe.ingredient.stockUnit.displayName}"></span>
+                    </td>
+                    <td>
+                        <button type="submit" formaction="/menu/recipe/update">수정</button>
+                        <button type="submit" formaction="/menu/recipe/remove">삭제</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </li>
+</ul>
+
+</body>
+</html>

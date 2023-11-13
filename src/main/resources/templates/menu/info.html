@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MJ Book Store</title>
+</head>
+<body>
+<!--헤더 프레그먼트-->
+<div th:insert="~{fragments :: headerFragment}"></div>
+
+<h3 th:text="${menu.name}">메뉴이름</h3>
+<p th:text="|${menu.price}원|">0000원</p>
+<p th:text="|카테고리: ${menu.category.displayName}|">카테고리: 커피</p>
+
+<form method="post">
+    <label for="menuId" hidden="hidden"></label>
+    <input type="hidden" th:value="${menu.id}" name="menuId" id="menuId">
+    <label for="quantity" hidden="hidden"></label>
+    <span th:if="${loginUser!=null}">수량 : </span>
+    <input th:if="${loginUser!=null}" type="number" name="quantity" id="quantity" value="1" style="width: 50px">
+    <br/><br/>
+    <button th:if="${loginUser!=null}" type="submit" formaction="/order/add">장바구니 담기</button>
+    <button th:if="${loginUser!=null}" type="submit" formaction="/order/quickOrder">바로 주문하기</button>
+</form>
+
+</body>
+</html>
