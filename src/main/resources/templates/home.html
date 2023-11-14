@@ -34,7 +34,10 @@
         </thead>
         <tbody>
         <tr th:each="menu : ${menuList}">
-            <td><span th:if="${menu.isSpecial()}">[특별메뉴]</span></td>
+            <td>
+                <span th:if="${menu.isSpecial()}">[추천메뉴]</span>
+                <span th:if="${menu.isMainMenu()}">[대표메뉴]</span>
+            </td>
             <td><a th:text="${menu.name}" th:href="@{/menu(menuId=${menu.id})}"></a></td>
             <td><span th:text="${menu.price}"></span></td>
             <td><span th:text="${menu.category.displayName}"></span></td>

@@ -23,6 +23,8 @@ public class Menu extends BaseEntity {
     private boolean active;
     @Column
     private boolean special;
+    @Column
+    private boolean mainMenu;
     @Enumerated(EnumType.STRING)
     @Column(name = "category")
     private Category category;

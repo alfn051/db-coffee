@@ -8,6 +8,7 @@ public class MenuDTO {
     private String name;
     private long price;
     private boolean special;
+    private boolean mainMenu;
     private Category category;
     //private List<RecipeDTO> recipes;
 
@@ -17,6 +18,7 @@ public class MenuDTO {
                 .price(price)
                 .active(true)
                 .special(special)
+                .mainMenu(mainMenu)
                 .category(category)
                 .build();
     }

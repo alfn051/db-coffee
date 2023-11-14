@@ -40,6 +40,7 @@ public class MenuService {
         menu.setName(dto.getName());
         menu.setPrice(dto.getPrice());
         menu.setSpecial(dto.isSpecial());
+        menu.setMainMenu(dto.isMainMenu());
         menu.setCategory(dto.getCategory());
     }
 
