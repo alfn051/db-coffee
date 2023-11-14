@@ -25,7 +25,13 @@
                                     th:text="${category.getDisplayName()}"></option>
                         </select>
                     </td>
-                    <td>스페셜메뉴 여부: <input type="checkbox" name="special"></td>
+<!--                    <td>스페셜메뉴 여부: <input type="checkbox" name="special"></td>-->
+                    <td>스페셜메뉴 여부:
+                        <select name="special">
+                            <option th:value="${false}" selected>선택안함</option>
+                            <option th:value="${true}">특별메뉴</option>
+                        </select>
+                    </td>
                     <td>
                         <button type="submit" formaction="/menu/add">메뉴추가</button>
                     </td>
@@ -48,10 +54,16 @@
                                 th:selected="${category.equals(menu.category)}"></option>
                         </select>
                     </td>
-                    <td>
-                        스페셜메뉴 여부:
-                        <input th:if="${menu.special}" type="checkbox" name="special" checked>
-                        <input th:unless="${menu.special}" type="checkbox" name="special">
+<!--                    <td>-->
+<!--                        스페셜메뉴 여부:-->
+<!--                        <input th:if="${menu.special}" type="checkbox" name="special" checked>-->
+<!--                        <input th:unless="${menu.special}" type="checkbox" name="special">-->
+<!--                    </td>-->
+                    <td>스페셜메뉴 여부:
+                        <select name="special">
+                            <option th:value="${false}" th:selected="${!menu.special}">선택안함</option>
+                            <option th:value="${true}" th:selected="${menu.special}">특별메뉴</option>
+                        </select>
                     </td>
                     <td>
                         <input type="text" name="menuId" th:value="${menu.id}" hidden="hidden">
