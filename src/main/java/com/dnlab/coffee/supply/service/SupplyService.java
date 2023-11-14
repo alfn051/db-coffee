@@ -45,6 +45,7 @@ public class SupplyService {
         supplierRepository.save(supplier);
     }
 
+    @Transactional
     public void deActivateSupplier(long supplierId){
         supplierRepository.findById(supplierId).ifPresent(supplier -> supplier.setActive(false));
     }
